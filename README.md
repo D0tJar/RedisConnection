@@ -37,10 +37,10 @@ public class RedisConnection {
 
     private void subscribe() {
         pubSub = get();
-        jedis = new Jedis("zany.rip");
+        jedis = new Jedis("localhost");
         new Thread() {
             public void run() {
-                jedis.subscribe(pubSub, "StaffUtils");
+                jedis.subscribe(pubSub, "ExampleChannel");
             }
         }.start();
     }
@@ -84,14 +84,14 @@ public class JedisPublisher {
     private Jedis jedis;
 
     public JedisPublisher(){
-        jedis = new Jedis("zany.rip");
+        jedis = new Jedis("localhost");
     }
 
     public void write(String msg) {
         try {
-            jedis.publish("StaffUtils", msg);
+            jedis.publish("ExampleChannel", msg);
         } catch (Exception ex) {
-            System.out.println("StaffUtils: A critical redis error has occured, if you encounter this message please contact a developer.");
+            System.out.println("Error: A critical redis error has occured, if you encounter this message please contact a developer.");
         }
     }
 
