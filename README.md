@@ -6,16 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.bson.Document;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
-import java.util.UUID;
-
 public class RedisConnection {
-
-    private Core core = Core.getInstance();
 
     @Getter
     private JedisPubSub pubSub;
@@ -72,6 +66,7 @@ public class RedisConnection {
     public enum Action {
         EXAMPLE_ACTION
     }
+}
 
 ```
 
