@@ -104,7 +104,7 @@ public class JedisPublisher {
 ```
 
 ### JedisMessage Class
-## Extra helpful class
+#### Extra helpful class
 ```java
 import com.google.gson.JsonObject;
 
