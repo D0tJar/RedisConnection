@@ -1,5 +1,4 @@
-# RedisConnection
-Redis connection 
+# RedisConnection Setup Instructions
 
 ### RedisConnection Class
 ```java
@@ -29,7 +28,8 @@ public class RedisConnection {
         subscribe();
         publisher = new JedisPublisher();
     }
-
+    
+    // Execute this in the main onDisable method 
     public void onDisable(){
         jedis.close();
         publisher.onDisable();
@@ -73,4 +73,64 @@ public class RedisConnection {
         EXAMPLE_ACTION
     }
 
+```
+
+### JedisPublisher Class
+```java
+import redis.clients.jedis.Jedis;
+
+public class JedisPublisher {
+
+    private Jedis jedis;
+
+    public JedisPublisher(){
+        jedis = new Jedis("zany.rip");
+    }
+
+    public void write(String msg) {
+        try {
+            jedis.publish("StaffUtils", msg);
+        } catch (Exception ex) {
+            System.out.println("StaffUtils: A critical redis error has occured, if you encounter this message please contact a developer.");
+        }
+    }
+
+    public void onDisable(){
+        jedis.close();
+    }
+
+}
+
+```
+
+### JedisMessage Class
+## Extra helpful class
+```java
+import com.google.gson.JsonObject;
+
+import java.util.HashMap;
+import java.util.Map;
+// Import RedisConnection and your main class. 
+
+public class JedisMessage {
+    private RedisConnection.Action action;
+    private Map<String, Object> data = new HashMap<>();
+    public JedisMessage(RedisConnection.Action action){
+        this.action = action;
+    }
+    public void put(String string, Object obj1){
+        data.put(string, obj1);
+    }
+    public void write(){
+        JsonObject object = new JsonObject();
+        object.addProperty("action", action.name());
+        JsonObject payLoad = new JsonObject();
+        for(String string : data.keySet()){
+            payLoad.addProperty(string, data.get(string).toString());
+        }
+        object.addProperty("payload", payLoad.toString());
+        // In this example Core.getInstance() is refering to the main class. 
+        Core.getInstance().getRedisConnection().getPublisher().write(object.toString());
+    }
+}
 ```
